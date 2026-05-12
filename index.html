@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LGS Puan Hesaplayıcı</title>
+
+<style>
+    *{
+        margin:0;
+        padding:0;
+        box-sizing:border-box;
+        font-family:Arial, sans-serif;
+    }
+
+    body{
+        background:#0f172a;
+        color:white;
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        min-height:100vh;
+        padding:20px;
+    }
+
+    .container{
+        width:100%;
+        max-width:500px;
+        background:#1e293b;
+        border-radius:20px;
+        padding:25px;
+        box-shadow:0 0 25px rgba(0,0,0,0.4);
+    }
+
+    h1{
+        text-align:center;
+        margin-bottom:20px;
+        color:#38bdf8;
+    }
+
+    .lesson{
+        margin-bottom:15px;
+    }
+
+    label{
+        display:block;
+        margin-bottom:5px;
+        font-weight:bold;
+    }
+
+    input{
+        width:100%;
+        padding:12px;
+        border:none;
+        border-radius:10px;
+        background:#334155;
+        color:white;
+        font-size:16px;
+    }
+
+    button{
+        width:100%;
+        padding:15px;
+        border:none;
+        border-radius:12px;
+        background:#38bdf8;
+        color:#0f172a;
+        font-size:18px;
+        font-weight:bold;
+        cursor:pointer;
+        margin-top:15px;
+        transition:0.2s;
+    }
+
+    button:hover{
+        transform:scale(1.02);
+    }
+
+    .result{
+        margin-top:25px;
+        text-align:center;
+        background:#0f172a;
+        padding:20px;
+        border-radius:15px;
+    }
+
+    .score{
+        font-size:42px;
+        color:#4ade80;
+        margin-top:10px;
+    }
+
+    .footer{
+        text-align:center;
+        margin-top:20px;
+        color:#94a3b8;
+        font-size:14px;
+    }
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>📘 LGS Puan Hesaplayıcı</h1>
+
+    <div class="lesson">
+        <label>Türkçe Neti</label>
+        <input type="number" id="turkce" value="0">
+    </div>
+
+    <div class="lesson">
+        <label>Matematik Neti</label>
+        <input type="number" id="mat" value="0">
+    </div>
+
+    <div class="lesson">
+        <label>Fen Neti</label>
+        <input type="number" id="fen" value="0">
+    </div>
+
+    <div class="lesson">
+        <label>İnkılap Neti</label>
+        <input type="number" id="ink" value="0">
+    </div>
+
+    <div class="lesson">
+        <label>Din Neti</label>
+        <input type="number" id="din" value="0">
+    </div>
+
+    <div class="lesson">
+        <label>İngilizce Neti</label>
+        <input type="number" id="ing" value="0">
+    </div>
+
+    <button onclick="hesapla()">Puan Hesapla</button>
+
+    <div class="result">
+        <h2>Tahmini LGS Puanı</h2>
+        <div class="score" id="score">0</div>
+    </div>
+
+    <div class="footer">
+        GitHub.io destekli prototip
+    </div>
+
+</div>
+
+<script>
+
+function hesapla(){
+
+    let turkce = Number(document.getElementById("turkce").value);
+    let mat = Number(document.getElementById("mat").value);
+    let fen = Number(document.getElementById("fen").value);
+    let ink = Number(document.getElementById("ink").value);
+    let din = Number(document.getElementById("din").value);
+    let ing = Number(document.getElementById("ing").value);
+
+    let puan =
+        (turkce * 4) +
+        (mat * 4) +
+        (fen * 4) +
+        (ink * 2) +
+        (din * 1) +
+        (ing * 1);
+
+    puan = 100 + (puan * 2.3);
+
+    if(puan > 500){
+        puan = 500;
+    }
+
+    document.getElementById("score").innerHTML =
+        puan.toFixed(2);
+
+}
+
+</script>
+
+</body>
+</html>
