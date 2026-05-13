@@ -3,53 +3,33 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LGS Puan Hesaplayıcı</title>
+<title>LGS Hesaplayıcı</title>
 
 <style>
-
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:Arial,sans-serif;
-}
-
 body{
+    font-family:Arial;
     background:#0f172a;
     color:white;
-    min-height:100vh;
     display:flex;
     justify-content:center;
-    align-items:center;
     padding:20px;
 }
 
 .container{
     width:100%;
-    max-width:650px;
+    max-width:700px;
     background:#1e293b;
-    border-radius:24px;
-    padding:25px;
-    box-shadow:0 0 35px rgba(0,0,0,0.4);
+    padding:20px;
+    border-radius:20px;
 }
 
-h1{
-    text-align:center;
-    margin-bottom:25px;
-    color:#38bdf8;
-}
+h1{ text-align:center; color:#38bdf8; }
 
 .lesson{
     background:#0f172a;
     padding:15px;
-    border-radius:16px;
-    margin-bottom:15px;
-}
-
-.lesson h2{
-    margin-bottom:12px;
-    color:#4ade80;
-    font-size:20px;
+    margin:10px 0;
+    border-radius:12px;
 }
 
 .row{
@@ -59,65 +39,31 @@ h1{
 
 input{
     width:100%;
-    padding:12px;
+    padding:10px;
+    border-radius:10px;
     border:none;
-    border-radius:12px;
     background:#334155;
     color:white;
-    font-size:16px;
 }
 
 button{
     width:100%;
     padding:15px;
+    margin-top:15px;
     border:none;
-    border-radius:16px;
+    border-radius:12px;
     background:#38bdf8;
-    color:#0f172a;
-    font-size:18px;
+    font-size:16px;
     font-weight:bold;
     cursor:pointer;
-    margin-top:10px;
-    transition:0.2s;
-}
-
-button:hover{
-    transform:scale(1.02);
 }
 
 .result{
-    margin-top:25px;
-    background:#0f172a;
-    padding:20px;
-    border-radius:18px;
-}
-
-.score{
-    text-align:center;
-    font-size:52px;
-    color:#4ade80;
-    margin-top:10px;
-    margin-bottom:15px;
-}
-
-.netler{
-    line-height:1.9;
-    color:#cbd5e1;
-}
-
-.warning{
-    margin-top:15px;
-    color:#f87171;
-    text-align:center;
-}
-
-.footer{
-    text-align:center;
     margin-top:20px;
-    color:#94a3b8;
-    font-size:14px;
+    background:#0f172a;
+    padding:15px;
+    border-radius:12px;
 }
-
 </style>
 </head>
 
@@ -125,126 +71,104 @@ button:hover{
 
 <div class="container">
 
-<h1>📘 LGS Puan Hesaplayıcı</h1>
+<h1>📘 LGS Hesaplayıcı</h1>
 
-<div id="lessons"></div>
+<div id="app"></div>
 
-<button onclick="hesapla()">Puan Hesapla</button>
+<button onclick="hesapla()">Hesapla</button>
 
 <div class="result">
-
-<h2>Tahmini LGS Puanı</h2>
-
-<div class="score" id="puan">0</div>
-
-<div class="netler" id="netler"></div>
-
-<div class="warning" id="warning"></div>
-
-</div>
-
-<div class="footer">
-Modern GitHub.io Prototipi
+<h2>Puan: <span id="puan">0</span></h2>
+<div id="detay"></div>
 </div>
 
 </div>
 
 <script>
 
+/* =========================
+   🎯 KATSAYILAR (BURADAN AYARLA)
+   ========================= */
+const KATSAYI = {
+    turkce: 4,
+    matematik: 4,
+    fen: 4,
+    sosyal: 1,
+    din: 1,
+    ingilizce: 1
+};
+
+/* =========================
+   📚 DERSLER
+   ========================= */
 const dersler = [
-    {id:"tr", ad:"Türkçe", soru:20, katsayi:4},
-    {id:"mat", ad:"Matematik", soru:20, katsayi:4},
-    {id:"fen", ad:"Fen", soru:20, katsayi:4},
-    {id:"sos", ad:"Sosyal", soru:10, katsayi:2},
-    {id:"din", ad:"Din", soru:10, katsayi:1},
-    {id:"ing", ad:"İngilizce", soru:10, katsayi:1}
+    {id:"turkce", ad:"Türkçe", soru:20},
+    {id:"matematik", ad:"Matematik", soru:20},
+    {id:"fen", ad:"Fen", soru:20},
+    {id:"sosyal", ad:"Sosyal", soru:10},
+    {id:"din", ad:"Din", soru:10},
+    {id:"ingilizce", ad:"İngilizce", soru:10}
 ];
 
-const lessonsDiv = document.getElementById("lessons");
+/* =========================
+   UI OLUŞTUR
+   ========================= */
+const app = document.getElementById("app");
 
-dersler.forEach(ders => {
-
-    lessonsDiv.innerHTML += `
-    
+dersler.forEach(d => {
+    app.innerHTML += `
     <div class="lesson">
-
-        <h2>${ders.ad} (${ders.soru} Soru)</h2>
-
+        <h3>${d.ad} (${d.soru})</h3>
         <div class="row">
-
-            <input 
-            type="number" 
-            id="${ders.id}_dogru"
-            placeholder="Doğru">
-
-            <input 
-            type="number" 
-            id="${ders.id}_bos"
-            placeholder="Boş">
-
+            <input id="${d.id}_dogru" placeholder="Doğru">
+            <input id="${d.id}_bos" placeholder="Boş">
         </div>
-
-    </div>
-    
-    `;
+    </div>`;
 });
 
+/* =========================
+   NET HESABI
+   ========================= */
+function netHesapla(dogru, bos, soru){
+    let yanlis = soru - dogru - bos;
+    return dogru - (yanlis / 3);
+}
+
+/* =========================
+   HESAPLAMA
+   ========================= */
 function hesapla(){
 
-    let toplamPuan = 0;
-    let netYazdir = "";
-    let hata = "";
+    let toplam = 0;
+    let max = 0;
+    let detay = "";
 
-    dersler.forEach(ders => {
+    for(let d of dersler){
 
-        let dogru =
-            Number(document.getElementById(`${ders.id}_dogru`).value);
+        let dogru = Number(document.getElementById(d.id+"_dogru").value || 0);
+        let bos = Number(document.getElementById(d.id+"_bos").value || 0);
 
-        let bos =
-            Number(document.getElementById(`${ders.id}_bos`).value);
-
-        let yanlis =
-            ders.soru - dogru - bos;
-
-        if(
-            dogru < 0 ||
-            bos < 0 ||
-            yanlis < 0
-        ){
-            hata = "Bazı değerler hatalı görünüyor.";
+        if(dogru + bos > d.soru){
+            alert(d.ad + " soru sayısını aşıyor!");
             return;
         }
 
-        let net =
-            dogru - (yanlis / 3);
+        let net = netHesapla(dogru, bos, d.soru);
 
-        toplamPuan +=
-            net * ders.katsayi;
+        let katsayi = KATSAYI[d.id];
 
-        netYazdir += `
-        ${ders.ad}: ${net.toFixed(2)} Net<br>
-        `;
-    });
+        toplam += net * katsayi;
+        max += d.soru * katsayi;
 
-    let puan =
-        100 + (toplamPuan * 3.1);
-
-    if(puan > 500){
-        puan = 500;
+        detay += `${d.ad}: ${net.toFixed(2)} net<br>`;
     }
 
-    if(puan < 100){
-        puan = 100;
-    }
+    let puan = 100 + (toplam / max) * 400;
 
-    document.getElementById("puan").innerHTML =
-        puan.toFixed(2);
+    puan = Math.max(100, Math.min(500, puan));
 
-    document.getElementById("netler").innerHTML =
-        netYazdir;
-
-    document.getElementById("warning").innerHTML =
-        hata;
+    document.getElementById("puan").innerText = puan.toFixed(2);
+    document.getElementById("detay").innerHTML = detay;
 }
 
 </script>
