@@ -3,12 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LGS Hesaplayıcı</title>
+<title>LGS 2025 Puan Hesaplayıcı</title>
 
 <style>
 body{
-    font-family:Arial;
-    background:#0f172a;
+    margin:0;
+    font-family:system-ui, Arial;
+    background:linear-gradient(135deg,#0f172a,#020617);
     color:white;
     display:flex;
     justify-content:center;
@@ -17,19 +18,34 @@ body{
 
 .container{
     width:100%;
-    max-width:700px;
-    background:#1e293b;
-    padding:20px;
+    max-width:800px;
+    background:#111827;
     border-radius:20px;
+    padding:20px;
+    box-shadow:0 0 30px rgba(0,0,0,0.4);
 }
 
-h1{ text-align:center; color:#38bdf8; }
+h1{
+    text-align:center;
+    color:#38bdf8;
+    margin-bottom:20px;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:12px;
+}
 
 .lesson{
-    background:#0f172a;
+    background:#0b1220;
     padding:15px;
-    margin:10px 0;
-    border-radius:12px;
+    border-radius:14px;
+}
+
+.lesson h3{
+    margin:0 0 10px 0;
+    color:#a7f3d0;
 }
 
 .row{
@@ -42,27 +58,40 @@ input{
     padding:10px;
     border-radius:10px;
     border:none;
-    background:#334155;
+    background:#1f2937;
     color:white;
+    font-size:16px;
 }
 
 button{
     width:100%;
-    padding:15px;
     margin-top:15px;
+    padding:15px;
     border:none;
-    border-radius:12px;
+    border-radius:14px;
     background:#38bdf8;
-    font-size:16px;
+    color:#0f172a;
+    font-size:18px;
     font-weight:bold;
     cursor:pointer;
 }
 
 .result{
     margin-top:20px;
-    background:#0f172a;
     padding:15px;
-    border-radius:12px;
+    background:#0b1220;
+    border-radius:14px;
+}
+
+.score{
+    font-size:42px;
+    text-align:center;
+    color:#4ade80;
+    margin:10px 0;
+}
+
+small{
+    color:#94a3b8;
 }
 </style>
 </head>
@@ -71,103 +100,106 @@ button{
 
 <div class="container">
 
-<h1>📘 LGS Hesaplayıcı</h1>
+<h1>📘 LGS 2025 Puan Hesaplayıcı</h1>
 
-<div id="app"></div>
+<div id="app" class="grid"></div>
 
-<button onclick="hesapla()">Hesapla</button>
+<button onclick="hesapla()">Puan Hesapla</button>
 
 <div class="result">
-<h2>Puan: <span id="puan">0</span></h2>
-<div id="detay"></div>
+    <div class="score" id="puan">0</div>
+    <div id="detay"></div>
 </div>
+
+<small>2025 model katsayı + 3 yanlış = 1 doğru</small>
 
 </div>
 
 <script>
 
 /* =========================
-   🎯 KATSAYILAR (BURADAN AYARLA)
-   ========================= */
+   📌 2025 MODEL SABİTLER
+========================= */
+const OFFSET = 194.752;
+
 const KATSAYI = {
-    turkce: 4,
-    matematik: 4,
-    fen: 4,
-    sosyal: 1,
-    din: 1,
-    ingilizce: 1
+    turkce: 4.348,
+    matematik: 4.253,
+    fen: 4.123,
+    sosyal: 1.666,
+    din: 1.899,
+    ingilizce: 1.5075
 };
 
 /* =========================
    📚 DERSLER
-   ========================= */
+========================= */
 const dersler = [
     {id:"turkce", ad:"Türkçe", soru:20},
     {id:"matematik", ad:"Matematik", soru:20},
     {id:"fen", ad:"Fen", soru:20},
-    {id:"sosyal", ad:"Sosyal", soru:10},
-    {id:"din", ad:"Din", soru:10},
+    {id:"sosyal", ad:"T.C. İnkılap", soru:10},
+    {id:"din", ad:"Din Kültürü", soru:10},
     {id:"ingilizce", ad:"İngilizce", soru:10}
 ];
 
 /* =========================
    UI OLUŞTUR
-   ========================= */
+========================= */
 const app = document.getElementById("app");
 
 dersler.forEach(d => {
     app.innerHTML += `
     <div class="lesson">
-        <h3>${d.ad} (${d.soru})</h3>
+        <h3>${d.ad} (${d.soru} Soru)</h3>
         <div class="row">
-            <input id="${d.id}_dogru" placeholder="Doğru">
-            <input id="${d.id}_bos" placeholder="Boş">
+            <input id="${d.id}_dogru" type="number" placeholder="Doğru">
+            <input id="${d.id}_yanlis" type="number" placeholder="Yanlış">
         </div>
     </div>`;
 });
 
 /* =========================
    NET HESABI
-   ========================= */
-function netHesapla(dogru, bos, soru){
-    let yanlis = soru - dogru - bos;
+========================= */
+function net(dogru, yanlis){
     return dogru - (yanlis / 3);
 }
 
 /* =========================
-   HESAPLAMA
-   ========================= */
+   ANA HESAP
+========================= */
 function hesapla(){
 
     let toplam = 0;
-    let max = 0;
     let detay = "";
 
     for(let d of dersler){
 
         let dogru = Number(document.getElementById(d.id+"_dogru").value || 0);
-        let bos = Number(document.getElementById(d.id+"_bos").value || 0);
+        let yanlis = Number(document.getElementById(d.id+"_yanlis").value || 0);
 
-        if(dogru + bos > d.soru){
-            alert(d.ad + " soru sayısını aşıyor!");
+        if(dogru + yanlis > d.soru){
+            alert(d.ad + " toplam soru sayısını aşıyor!");
             return;
         }
 
-        let net = netHesapla(dogru, bos, d.soru);
+        let netDeger = net(dogru, yanlis);
 
         let katsayi = KATSAYI[d.id];
 
-        toplam += net * katsayi;
-        max += d.soru * katsayi;
+        let puanKatkisi = netDeger * katsayi;
 
-        detay += `${d.ad}: ${net.toFixed(2)} net<br>`;
+        toplam += puanKatkisi;
+
+        detay += `${d.ad}: ${netDeger.toFixed(2)} net<br>`;
     }
 
-    let puan = 100 + (toplam / max) * 400;
+    let puan = toplam + OFFSET;
 
     puan = Math.max(100, Math.min(500, puan));
 
-    document.getElementById("puan").innerText = puan.toFixed(2);
+    document.getElementById("puan").innerText = puan.toFixed(3);
     document.getElementById("detay").innerHTML = detay;
 }
 
