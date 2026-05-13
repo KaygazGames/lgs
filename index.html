@@ -6,96 +6,118 @@
 <title>LGS Puan Hesaplayıcı</title>
 
 <style>
-    *{
-        margin:0;
-        padding:0;
-        box-sizing:border-box;
-        font-family:Arial, sans-serif;
-    }
 
-    body{
-        background:#0f172a;
-        color:white;
-        display:flex;
-        justify-content:center;
-        align-items:center;
-        min-height:100vh;
-        padding:20px;
-    }
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,sans-serif;
+}
 
-    .container{
-        width:100%;
-        max-width:500px;
-        background:#1e293b;
-        border-radius:20px;
-        padding:25px;
-        box-shadow:0 0 25px rgba(0,0,0,0.4);
-    }
+body{
+    background:#0f172a;
+    color:white;
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:20px;
+}
 
-    h1{
-        text-align:center;
-        margin-bottom:20px;
-        color:#38bdf8;
-    }
+.container{
+    width:100%;
+    max-width:650px;
+    background:#1e293b;
+    border-radius:24px;
+    padding:25px;
+    box-shadow:0 0 35px rgba(0,0,0,0.4);
+}
 
-    .lesson{
-        margin-bottom:15px;
-    }
+h1{
+    text-align:center;
+    margin-bottom:25px;
+    color:#38bdf8;
+}
 
-    label{
-        display:block;
-        margin-bottom:5px;
-        font-weight:bold;
-    }
+.lesson{
+    background:#0f172a;
+    padding:15px;
+    border-radius:16px;
+    margin-bottom:15px;
+}
 
-    input{
-        width:100%;
-        padding:12px;
-        border:none;
-        border-radius:10px;
-        background:#334155;
-        color:white;
-        font-size:16px;
-    }
+.lesson h2{
+    margin-bottom:12px;
+    color:#4ade80;
+    font-size:20px;
+}
 
-    button{
-        width:100%;
-        padding:15px;
-        border:none;
-        border-radius:12px;
-        background:#38bdf8;
-        color:#0f172a;
-        font-size:18px;
-        font-weight:bold;
-        cursor:pointer;
-        margin-top:15px;
-        transition:0.2s;
-    }
+.row{
+    display:flex;
+    gap:10px;
+}
 
-    button:hover{
-        transform:scale(1.02);
-    }
+input{
+    width:100%;
+    padding:12px;
+    border:none;
+    border-radius:12px;
+    background:#334155;
+    color:white;
+    font-size:16px;
+}
 
-    .result{
-        margin-top:25px;
-        text-align:center;
-        background:#0f172a;
-        padding:20px;
-        border-radius:15px;
-    }
+button{
+    width:100%;
+    padding:15px;
+    border:none;
+    border-radius:16px;
+    background:#38bdf8;
+    color:#0f172a;
+    font-size:18px;
+    font-weight:bold;
+    cursor:pointer;
+    margin-top:10px;
+    transition:0.2s;
+}
 
-    .score{
-        font-size:42px;
-        color:#4ade80;
-        margin-top:10px;
-    }
+button:hover{
+    transform:scale(1.02);
+}
 
-    .footer{
-        text-align:center;
-        margin-top:20px;
-        color:#94a3b8;
-        font-size:14px;
-    }
+.result{
+    margin-top:25px;
+    background:#0f172a;
+    padding:20px;
+    border-radius:18px;
+}
+
+.score{
+    text-align:center;
+    font-size:52px;
+    color:#4ade80;
+    margin-top:10px;
+    margin-bottom:15px;
+}
+
+.netler{
+    line-height:1.9;
+    color:#cbd5e1;
+}
+
+.warning{
+    margin-top:15px;
+    color:#f87171;
+    text-align:center;
+}
+
+.footer{
+    text-align:center;
+    margin-top:20px;
+    color:#94a3b8;
+    font-size:14px;
+}
+
 </style>
 </head>
 
@@ -103,79 +125,126 @@
 
 <div class="container">
 
-    <h1>📘 LGS Puan Hesaplayıcı</h1>
+<h1>📘 LGS Puan Hesaplayıcı</h1>
 
-    <div class="lesson">
-        <label>Türkçe Neti</label>
-        <input type="number" id="turkce" value="0">
-    </div>
+<div id="lessons"></div>
 
-    <div class="lesson">
-        <label>Matematik Neti</label>
-        <input type="number" id="mat" value="0">
-    </div>
+<button onclick="hesapla()">Puan Hesapla</button>
 
-    <div class="lesson">
-        <label>Fen Neti</label>
-        <input type="number" id="fen" value="0">
-    </div>
+<div class="result">
 
-    <div class="lesson">
-        <label>İnkılap Neti</label>
-        <input type="number" id="ink" value="0">
-    </div>
+<h2>Tahmini LGS Puanı</h2>
 
-    <div class="lesson">
-        <label>Din Neti</label>
-        <input type="number" id="din" value="0">
-    </div>
+<div class="score" id="puan">0</div>
 
-    <div class="lesson">
-        <label>İngilizce Neti</label>
-        <input type="number" id="ing" value="0">
-    </div>
+<div class="netler" id="netler"></div>
 
-    <button onclick="hesapla()">Puan Hesapla</button>
+<div class="warning" id="warning"></div>
 
-    <div class="result">
-        <h2>Tahmini LGS Puanı</h2>
-        <div class="score" id="score">0</div>
-    </div>
+</div>
 
-    <div class="footer">
-        GitHub.io destekli prototip
-    </div>
+<div class="footer">
+Modern GitHub.io Prototipi
+</div>
 
 </div>
 
 <script>
 
+const dersler = [
+    {id:"tr", ad:"Türkçe", soru:20, katsayi:4},
+    {id:"mat", ad:"Matematik", soru:20, katsayi:4},
+    {id:"fen", ad:"Fen", soru:20, katsayi:4},
+    {id:"sos", ad:"Sosyal", soru:10, katsayi:2},
+    {id:"din", ad:"Din", soru:10, katsayi:1},
+    {id:"ing", ad:"İngilizce", soru:10, katsayi:1}
+];
+
+const lessonsDiv = document.getElementById("lessons");
+
+dersler.forEach(ders => {
+
+    lessonsDiv.innerHTML += `
+    
+    <div class="lesson">
+
+        <h2>${ders.ad} (${ders.soru} Soru)</h2>
+
+        <div class="row">
+
+            <input 
+            type="number" 
+            id="${ders.id}_dogru"
+            placeholder="Doğru">
+
+            <input 
+            type="number" 
+            id="${ders.id}_bos"
+            placeholder="Boş">
+
+        </div>
+
+    </div>
+    
+    `;
+});
+
 function hesapla(){
 
-    let turkce = Number(document.getElementById("turkce").value);
-    let mat = Number(document.getElementById("mat").value);
-    let fen = Number(document.getElementById("fen").value);
-    let ink = Number(document.getElementById("ink").value);
-    let din = Number(document.getElementById("din").value);
-    let ing = Number(document.getElementById("ing").value);
+    let toplamPuan = 0;
+    let netYazdir = "";
+    let hata = "";
+
+    dersler.forEach(ders => {
+
+        let dogru =
+            Number(document.getElementById(`${ders.id}_dogru`).value);
+
+        let bos =
+            Number(document.getElementById(`${ders.id}_bos`).value);
+
+        let yanlis =
+            ders.soru - dogru - bos;
+
+        if(
+            dogru < 0 ||
+            bos < 0 ||
+            yanlis < 0
+        ){
+            hata = "Bazı değerler hatalı görünüyor.";
+            return;
+        }
+
+        let net =
+            dogru - (yanlis / 3);
+
+        toplamPuan +=
+            net * ders.katsayi;
+
+        netYazdir += `
+        ${ders.ad}: ${net.toFixed(2)} Net<br>
+        `;
+    });
 
     let puan =
-        (turkce * 4) +
-        (mat * 4) +
-        (fen * 4) +
-        (ink * 2) +
-        (din * 1) +
-        (ing * 1);
-
-    puan = 100 + (puan * 2.3);
+        100 + (toplamPuan * 3.1);
 
     if(puan > 500){
         puan = 500;
     }
 
-    document.getElementById("score").innerHTML =
+    if(puan < 100){
+        puan = 100;
+    }
+
+    document.getElementById("puan").innerHTML =
         puan.toFixed(2);
 
+    document.getElementById("netler").innerHTML =
+        netYazdir;
+
+    document.getElementById("warning").innerHTML =
+        hata;
 }
 
 </script>
